@@ -22,7 +22,7 @@ info.forEach(
 
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", (data) => {
-    let cmd, [...args] = data.split(' ');
+    let [cmd,...args] = data.split(' ');
     console.log(cmd);
     console.log(args);
     console.log("You typed", data.trim());
