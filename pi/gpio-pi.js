@@ -24,7 +24,8 @@ process.stdin.setEncoding("utf8");
 process.stdin.on("data", (data) => {
     let [cmd,...args] = data.split(' ');
     if(cmd == 'T'){
-      info.filter(x=>x.score==parseInt(args[0].trim()))[0] = parseInt(args[1].trim());
+      let y = info.filter(x=>x.score==parseInt(args[0].trim()))[0];
+      y.threshold = parseInt(args[1].trim());
       console.log(info);
     }
     console.log("You typed", data.trim());
