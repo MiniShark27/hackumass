@@ -27,6 +27,8 @@ process.stdin.on("data", (data) => {
       let y = info.filter(x=>x.score==parseInt(args[0].trim()))[0];
       y.threshold = parseInt(args[1].trim());
       console.log(info);
+    } else if (cmd == 'N'){
+      socket.emit('newgame',{name:args[0]});
     }
     console.log("You typed", data.trim());
 });
