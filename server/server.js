@@ -50,7 +50,7 @@ async function addToScoreboard(score, name) {
 let globalScore = 0;
 let globalName = "";
 let globalLeaderBoard = [];
-const BALL_COUNT = 30;
+const BALL_COUNT = 5;
 let curBallCount = BALL_COUNT;
 
 app.get("/data", (req, res) => {
