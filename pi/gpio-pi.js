@@ -14,6 +14,8 @@ info.forEach(
   x => (x.echo = new Gpio(x.pin, { mode: Gpio.INPUT, alert: true }))
 );
 
+const SCORE_DELAY = 2000;
+
 trigger.digitalWrite(0); // Make sure trigger is low
 
 let throttle = false;
@@ -42,7 +44,7 @@ const watchHCSR04 = () => {
         console.log(`Sensor ${i}: ${temp}`);
         if (temp < THRESHOLD && !throttle) {
           console.log(`Sensor ${i}: ${temp} < ${THRESHOLD}`);
-          if (new Date() - lastScore > 5000) {
+          if (new Date() - lastScore > SCORE_DELAY) {
             lastScore = new Date()
             socket.emit("score", {
               points: x.score,
