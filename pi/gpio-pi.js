@@ -30,7 +30,7 @@ socket.on("connect", () => {
 
 const watchHCSR04 = () => {
   let startTick;
-  info.forEach((x,i) => {
+  info.forEach((x, i) => {
     x.echo.glitchFilter(500)
     x.echo.on("alert", (level, tick) => {
       if (level == 1) {
@@ -40,7 +40,8 @@ const watchHCSR04 = () => {
         const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         console.log(`Sensor ${i}: ${diff / 2 / MICROSECDONDS_PER_CM}`);
         if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD && !throttle) {
-          if(new Date()-lastScore>5000){
+          console.log(`Sensor ${i}: ${diff / 2 / MICROSECDONDS_PER_CM} < ${THRESHOLD}`);
+          if (new Date() - lastScore > 5000) {
             lastScore = new Date()
             socket.emit("score", {
               points: x.score,
