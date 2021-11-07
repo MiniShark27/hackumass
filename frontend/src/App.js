@@ -28,7 +28,7 @@ export default function App() {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newsocket = io("http://localhost:9000");
+    const newsocket = io("http://hackumass.croissant.one:9000");
     setSocket(newsocket);
     newsocket.on("gamedata", (data) => {
       setTable(data.leaderBoard);
@@ -39,7 +39,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:9000/data")
+    fetch("http://hackumass.croissant.one:9000/data")
       .then((response) => response.json())
       .then((data) => {
         setScore(data.score);
