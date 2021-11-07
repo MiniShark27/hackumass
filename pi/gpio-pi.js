@@ -2,6 +2,11 @@ const Gpio = require("pigpio").Gpio;
 const io = require("socket.io-client");
 const socket = io.connect("http://skeeball.croissant.one:9000");
 
+process.stdin.setEncoding("utf8");
+process.stdin.on("data", (data) => {
+    console.log("You typed", data.trim());
+});
+
 // The number of microseconds it takes sound to travel 1cm at 20 degrees celcius
 const MICROSECDONDS_PER_CM = 1e6 / 34321;
 const SCORE_DELAY = 1000;
