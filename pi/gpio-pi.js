@@ -7,6 +7,7 @@ const MICROSECDONDS_PER_CM = 1e6 / 34321 / 2;
 const SCORE_DELAY = 1000;
 const trigger = new Gpio(23, { mode: Gpio.OUTPUT });
 trigger.digitalWrite(0); // Make sure trigger is low
+let throttle = false;
 let lastScore = new Date();
 const info = [
   { pin: 24, score: 100, echo: null, threshold: 7 },
@@ -26,6 +27,7 @@ socket.on("connect", () => {
 const watchHCSR04 = () => {
   let startTick;
   info.forEach((x, i) => {
+    // x.echo.glitchFilter(500)
     x.echo.on("alert", (level, tick) => {
       if (level == 1) {
         startTick = tick;
@@ -34,13 +36,17 @@ const watchHCSR04 = () => {
         const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         const temp = diff / MICROSECDONDS_PER_CM;
         console.log(`Sensor ${i}: ${temp}`);
-        if (temp < x.threshold) {
+        if (temp < x.threshold && !throttle) {
           console.log(`Sensor ${i}: ${temp} < ${x.threshold}`);
           if (new Date() - lastScore > SCORE_DELAY) {
             lastScore = new Date()
             socket.emit("score", {
               points: x.score,
             });
+            throttle = true;
+            setTimeout(() => {
+              throttle = false;
+            }, 1000);
           }
         }
       }
