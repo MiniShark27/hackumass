@@ -38,9 +38,10 @@ const watchHCSR04 = () => {
       } else {
         const endTick = tick;
         const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-        console.log(`Sensor ${i}: ${diff / 2 / MICROSECDONDS_PER_CM}`);
-        if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD && !throttle) {
-          console.log(`Sensor ${i}: ${diff / 2 / MICROSECDONDS_PER_CM} < ${THRESHOLD}`);
+        const temp = diff / 2 / MICROSECDONDS_PER_CM;
+        console.log(`Sensor ${i}: ${temp}`);
+        if (temp < THRESHOLD && !throttle) {
+          console.log(`Sensor ${i}: ${temp} < ${THRESHOLD}`);
           if (new Date() - lastScore > 5000) {
             lastScore = new Date()
             socket.emit("score", {
