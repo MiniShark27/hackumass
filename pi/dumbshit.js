@@ -22,10 +22,6 @@ socket.on("connect", () => {
 
 const watchHCSR04 = () => {
   let startTick;
-  echo0.glitchFilter(500);
-  echo1.glitchFilter(500);
-  echo2.glitchFilter(500);
-  echo3.glitchFilter(500);
 
   echo0.on("alert", (level, tick) => {
     if (level == 1) {
