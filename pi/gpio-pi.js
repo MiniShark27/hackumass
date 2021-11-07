@@ -23,8 +23,9 @@ info.forEach(
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", (data) => {
     let [cmd,...args] = data.split(' ');
-    console.log(cmd);
-    console.log(args);
+    if(cmd == 'T'){
+      info.filter(x=>x.score==parseInt(args[0].trim()))[0] = parseInt(args[1].trim());
+    }
     console.log("You typed", data.trim());
 });
 
