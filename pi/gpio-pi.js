@@ -48,7 +48,7 @@ const watchHCSR04 = () => {
         const endTick = tick;
         const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         const temp = diff / 2 / MICROSECDONDS_PER_CM;
-          console.log(`Sensor ${x.score}`);
+          console.log(`Sensor ${x.score}: ${temp}`);
           if (temp < x.threshold && !throttle && temp>1) {
           console.log(`Sensor ${x.score}: ${temp} < ${x.threshold}`);
           if (new Date() - lastScore > SCORE_DELAY) {
