@@ -5,10 +5,10 @@ const MICROSECDONDS_PER_CM = 1e6 / 34321;
 const THRESHOLD = 7;
 const trigger = new Gpio(23, { mode: Gpio.OUTPUT });
 const info = [
-  { pin: 24, score: 100, echo: null },
-  { pin: 25, score: 50, echo: null },
-  { pin: 22, score: 20, echo: null },
-  { pin: 27, score: 10, echo: null },
+  { pin: 24, score: 100, echo: null, threshold: 7 },
+  { pin: 25, score: 50, echo: null, threshold: 7 },
+  { pin: 22, score: 20, echo: null, threshold: 7 },
+  { pin: 27, score: 10, echo: null, threshold: 7 },
 ];
 info.forEach(
   x => (x.echo = new Gpio(x.pin, { mode: Gpio.INPUT, alert: true }))
@@ -42,8 +42,8 @@ const watchHCSR04 = () => {
         const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         const temp = diff / 2 / MICROSECDONDS_PER_CM;
         console.log(`Sensor ${i}: ${temp}`);
-        if (temp < THRESHOLD && !throttle) {
-          console.log(`Sensor ${i}: ${temp} < ${THRESHOLD}`);
+        if (temp < x.threshold && !throttle) {
+          console.log(`Sensor ${i}: ${temp} < ${x.threshold}`);
           if (new Date() - lastScore > SCORE_DELAY) {
             lastScore = new Date()
             socket.emit("score", {
