@@ -6,7 +6,7 @@ const MICROSECDONDS_PER_CM = 1e6/34321;
 const trigger = new Gpio(23, {mode: Gpio.OUTPUT});
 const echo0 = new Gpio(24, {mode: Gpio.INPUT, alert: true});
 const echo1 = new Gpio(25, {mode: Gpio.INPUT, alert: true});
-const echo2 = new Gpio(8, {mode: Gpio.INPUT, alert: true});
+const echo2 = new Gpio(22, {mode: Gpio.INPUT, alert: true});
 
 trigger.digitalWrite(0); // Make sure trigger is low
 
