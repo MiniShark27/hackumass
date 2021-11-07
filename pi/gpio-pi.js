@@ -31,24 +31,27 @@ socket.on("connect", () => {
 const watchHCSR04 = () => {
   let startTick;
   info.forEach((x, i) => {
-    x.echo.glitchFilter(500)
+    // x.echo.glitchFilter(500)
     x.echo.on("alert", (level, tick) => {
-
-      const endTick = tick;
-      const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-      const temp = diff / 2 / MICROSECDONDS_PER_CM;
-      console.log(`Sensor ${i}: ${temp}`);
-      if (temp < THRESHOLD && !throttle) {
-        console.log(`Sensor ${i}: ${temp} < ${THRESHOLD}`);
-        if (new Date() - lastScore > 5000) {
-          lastScore = new Date()
-          socket.emit("score", {
-            points: x.score,
-          });
-          throttle = true;
-          setTimeout(() => {
-            throttle = false;
-          }, 1000);
+      if (level == 1) {
+        startTick = tick;
+      } else {
+        const endTick = tick;
+        const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
+        const temp = diff / 2 / MICROSECDONDS_PER_CM;
+        console.log(`Sensor ${i}: ${temp}`);
+        if (temp < THRESHOLD && !throttle) {
+          console.log(`Sensor ${i}: ${temp} < ${THRESHOLD}`);
+          if (new Date() - lastScore > 5000) {
+            lastScore = new Date()
+            socket.emit("score", {
+              points: x.score,
+            });
+            throttle = true;
+            setTimeout(() => {
+              throttle = false;
+            }, 1000);
+          }
         }
       }
     });
