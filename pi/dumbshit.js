@@ -34,7 +34,7 @@ const watchHCSR04 = () => {
           points: 100
         })
         throttle = true
-        setTimeout(() => {throttle = false}, 3000)
+        setTimeout(() => {throttle = false}, 1000)
       }
     }
   });
@@ -51,7 +51,7 @@ const watchHCSR04 = () => {
           points: 50
         })
         throttle = true
-        setTimeout(() => {throttle = false}, 3000)
+        setTimeout(() => {throttle = false}, 1000)
       }
     }
   });
@@ -68,7 +68,7 @@ const watchHCSR04 = () => {
           points: 20
         })
         throttle = true
-        setTimeout(() => {throttle = false}, 3000)
+        setTimeout(() => {throttle = false}, 1000)
       }
     }
   });
@@ -85,7 +85,7 @@ const watchHCSR04 = () => {
           points: 10
         })
         throttle = true
-        setTimeout(() => {throttle = false}, 3000)
+        setTimeout(() => {throttle = false}, 1000)
       }
     }
   });
