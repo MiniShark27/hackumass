@@ -11,8 +11,8 @@ let throttle = false;
 let lastScore = new Date();
 const info = [
   { pin: 24, score: 100, echo: null, threshold: 7 },
-  { pin: 25, score: 50, echo: null, threshold: 10 },
-  { pin: 22, score: 20, echo: null, threshold: 8 },
+  { pin: 25, score: 50, echo: null, threshold: 9.7 },
+  { pin: 22, score: 20, echo: null, threshold: 7.6 },
   { pin: 27, score: 10, echo: null, threshold: 7 },
 ];
 
@@ -48,7 +48,8 @@ const watchHCSR04 = () => {
         const endTick = tick;
         const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         const temp = diff / 2 / MICROSECDONDS_PER_CM;
-        if (temp < x.threshold && !throttle && temp>1) {
+          console.log(`Sensor ${x.score}`);
+          if (temp < x.threshold && !throttle && temp>1) {
           console.log(`Sensor ${x.score}: ${temp} < ${x.threshold}`);
           if (new Date() - lastScore > SCORE_DELAY) {
             lastScore = new Date()
