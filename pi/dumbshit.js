@@ -6,6 +6,7 @@ const MICROSECDONDS_PER_CM = 1e6/34321;
 const trigger = new Gpio(23, {mode: Gpio.OUTPUT});
 const echo0 = new Gpio(24, {mode: Gpio.INPUT, alert: true});
 const echo1 = new Gpio(25, {mode: Gpio.INPUT, alert: true});
+const echo2 = new Gpio(8, {mode: Gpio.INPUT, alert: true});
 
 trigger.digitalWrite(0); // Make sure trigger is low
 
@@ -29,6 +30,16 @@ const watchHCSR04 = () => {
       const endTick = tick;
       const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
       console.log(`Sensor 1: ${diff / 2 / MICROSECDONDS_PER_CM}`);
+    }
+  });
+
+	echo2.on('alert', (level, tick) => {
+    if (level == 1) {
+      startTick = tick;
+    } else {
+      const endTick = tick;
+      const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
+      console.log(`Sensor 2: ${diff / 2 / MICROSECDONDS_PER_CM}`);
     }
   });
 };
