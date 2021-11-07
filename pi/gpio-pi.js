@@ -6,9 +6,9 @@ const THRESHOLD = 4;
 const trigger = new Gpio(23, { mode: Gpio.OUTPUT });
 const info = [
   { pin: 24, score: 100, echo: null },
-  { pin: 25, score: 50, echo: null },
-  { pin: 22, score: 20, echo: null },
-  { pin: 27, score: 10, echo: null },
+  // { pin: 25, score: 50, echo: null },
+  // { pin: 22, score: 20, echo: null },
+  // { pin: 27, score: 10, echo: null },
 ];
 info.forEach(
   x => (x.echo = new Gpio(x.pin, { mode: Gpio.INPUT, alert: true }))
