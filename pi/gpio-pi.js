@@ -4,95 +4,50 @@ const Gpio = require("pigpio").Gpio;
 const MICROSECDONDS_PER_CM = 1e6 / 34321;
 const THRESHOLD = 4;
 const trigger = new Gpio(23, { mode: Gpio.OUTPUT });
-const echo0 = new Gpio(24, { mode: Gpio.INPUT, alert: true });
-const echo1 = new Gpio(25, { mode: Gpio.INPUT, alert: true });
-const echo2 = new Gpio(22, { mode: Gpio.INPUT, alert: true });
-const echo3 = new Gpio(27, { mode: Gpio.INPUT, alert: true });
+const info = [
+  { pin: 24, score: 100, echo: null },
+  { pin: 25, score: 50, echo: null },
+  { pin: 22, score: 20, echo: null },
+  { pin: 27, score: 10, echo: null },
+];
+info.forEach(
+  x => (x.echo = new Gpio(x.pin, { mode: Gpio.INPUT, alert: true }))
+);
+
 trigger.digitalWrite(0); // Make sure trigger is low
 
-let throttle = false
+let throttle = false;
 
 const io = require("socket.io-client");
 
 const socket = io.connect("http://skeeball.croissant.one:9000");
 
 socket.on("connect", () => {
-	console.log("Connected to server");
+  console.log("Connected to server");
 });
 
 const watchHCSR04 = () => {
   let startTick;
-  echo0.glitchFilter(500);
-  echo1.glitchFilter(500);
-  echo2.glitchFilter(500);
-  echo3.glitchFilter(500);
-
-  echo0.on("alert", (level, tick) => {
-    if (level == 1) {
-      startTick = tick;
-    } else {
-      const endTick = tick;
-      const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-      console.log(`Sensor 0: ${diff / 2 / MICROSECDONDS_PER_CM}`);
-      if ((diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) && !throttle) {
-        socket.emit("score",{
-          points: 100
-        })
-        throttle = true
-        setTimeout(() => {throttle = false}, 1000)
+  info.forEach(x => {
+    x.echo.glitchFilter(500)
+    x.echo.on("alert", (level, tick) => {
+      if (level == 1) {
+        startTick = tick;
+      } else {
+        const endTick = tick;
+        const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
+        console.log(`Sensor 0: ${diff / 2 / MICROSECDONDS_PER_CM}`);
+        if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD && !throttle) {
+          socket.emit("score", {
+            points: x.score,
+          });
+          throttle = true;
+          setTimeout(() => {
+            throttle = false;
+          }, 1000);
+        }
       }
-    }
-  });
-
-  echo1.on("alert", (level, tick) => {
-    if (level == 1) {
-      startTick = tick;
-    } else {
-      const endTick = tick;
-      const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-      console.log(`Sensor 1: ${diff / 2 / MICROSECDONDS_PER_CM}`);
-      if ((diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) && !throttle) {
-        socket.emit("score",{
-          points: 50
-        })
-        throttle = true
-        setTimeout(() => {throttle = false}, 1000)
-      }
-    }
-  });
-
-  echo2.on("alert", (level, tick) => {
-    if (level == 1) {
-      startTick = tick;
-    } else {
-      const endTick = tick;
-      const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-      console.log(`Sensor 2: ${diff / 2 / MICROSECDONDS_PER_CM}`);
-      if ((diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) && !throttle) {
-        socket.emit("score",{
-          points: 20
-        })
-        throttle = true
-        setTimeout(() => {throttle = false}, 1000)
-      }
-    }
-  });
-
-  echo3.on("alert", (level, tick) => {
-    if (level == 1) {
-      startTick = tick;
-    } else {
-      const endTick = tick;
-      const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-      console.log(`Sensor 3: ${diff / 2 / MICROSECDONDS_PER_CM}`);
-      if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) {
-        socket.emit("score",{
-          points: 10
-        })
-        throttle = true
-        setTimeout(() => {throttle = false}, 1000)
-      }
-    }
+    });
   });
 };
 
