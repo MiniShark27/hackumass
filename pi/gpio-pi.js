@@ -18,6 +18,8 @@ trigger.digitalWrite(0); // Make sure trigger is low
 
 let throttle = false;
 
+let lastScore = new Date();
+
 const io = require("socket.io-client");
 
 const socket = io.connect("http://skeeball.croissant.one:9000");
@@ -38,13 +40,16 @@ const watchHCSR04 = () => {
         const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
         console.log(`Sensor ${i}: ${diff / 2 / MICROSECDONDS_PER_CM}`);
         if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD && !throttle) {
-          socket.emit("score", {
-            points: x.score,
-          });
-          throttle = true;
-          setTimeout(() => {
-            throttle = false;
-          }, 1000);
+          if(new Date()-lastScore>5000){
+            lastScore = new Date()
+            socket.emit("score", {
+              points: x.score,
+            });
+            throttle = true;
+            setTimeout(() => {
+              throttle = false;
+            }, 1000);
+          }
         }
       }
     });
