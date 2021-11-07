@@ -20,14 +20,13 @@ info.forEach(
   x => (x.echo = new Gpio(x.pin, { mode: Gpio.INPUT, alert: true }))
 );
 
-// process.stdin.setEncoding("utf8");
-// process.stdin.on("data", (data) => {
-//     if(!isNaN(data)){
-//       const num = parseInt(data);
-//       info.
-//     }
-//     console.log("You typed", data.trim());
-// });
+process.stdin.setEncoding("utf8");
+process.stdin.on("data", (data) => {
+    let cmd, [...args] = data.split(' ');
+    console.log(cmd);
+    console.log(args);
+    console.log("You typed", data.trim());
+});
 
 socket.on("connect", () => {
   console.log("Connected to server");
