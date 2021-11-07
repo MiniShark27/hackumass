@@ -17,7 +17,7 @@ let lastScore = new Date();
 const info = [
   { pin: 24, score: 100, echo: null, threshold: 7 },
   { pin: 25, score: 50, echo: null, threshold: 7 },
-  { pin: 22, score: 20, echo: null, threshold: 8 },
+  { pin: 22, score: 20, echo: null, threshold: 10 },
   { pin: 27, score: 10, echo: null, threshold: 7 },
 ];
 
