@@ -2,11 +2,6 @@ const Gpio = require("pigpio").Gpio;
 const io = require("socket.io-client");
 const socket = io.connect("http://skeeball.croissant.one:9000");
 
-process.stdin.setEncoding("utf8");
-process.stdin.on("data", (data) => {
-    console.log("You typed", data.trim());
-});
-
 // The number of microseconds it takes sound to travel 1cm at 20 degrees celcius
 const MICROSECDONDS_PER_CM = 1e6 / 34321;
 const SCORE_DELAY = 1000;
@@ -16,14 +11,23 @@ let throttle = false;
 let lastScore = new Date();
 const info = [
   { pin: 24, score: 100, echo: null, threshold: 7 },
-  { pin: 25, score: 50, echo: null, threshold: 7 },
-  { pin: 22, score: 20, echo: null, threshold: 10 },
+  { pin: 25, score: 50, echo: null, threshold: 10 },
+  { pin: 22, score: 20, echo: null, threshold: 8 },
   { pin: 27, score: 10, echo: null, threshold: 7 },
 ];
 
 info.forEach(
   x => (x.echo = new Gpio(x.pin, { mode: Gpio.INPUT, alert: true }))
 );
+
+// process.stdin.setEncoding("utf8");
+// process.stdin.on("data", (data) => {
+//     if(!isNaN(data)){
+//       const num = parseInt(data);
+//       info.
+//     }
+//     console.log("You typed", data.trim());
+// });
 
 socket.on("connect", () => {
   console.log("Connected to server");
