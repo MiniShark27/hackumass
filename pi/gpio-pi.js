@@ -2,7 +2,7 @@ const Gpio = require("pigpio").Gpio;
 
 // The number of microseconds it takes sound to travel 1cm at 20 degrees celcius
 const MICROSECDONDS_PER_CM = 1e6 / 34321;
-const THRESHOLD = 4;
+const THRESHOLD = 7;
 const trigger = new Gpio(23, { mode: Gpio.OUTPUT });
 const info = [
   { pin: 24, score: 100, echo: null },
