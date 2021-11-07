@@ -47,7 +47,7 @@ const watchHCSR04 = () => {
         const temp = diff / 2 / MICROSECDONDS_PER_CM;
         // console.log(`Sensor ${i}: ${temp}`);
         if (temp < x.threshold && !throttle) {
-          console.log(`Sensor ${i}: ${temp} < ${x.threshold}`);
+          console.log(`Sensor ${x.score}: ${temp} < ${x.threshold}`);
           if (new Date() - lastScore > SCORE_DELAY) {
             lastScore = new Date()
             socket.emit("score", {
