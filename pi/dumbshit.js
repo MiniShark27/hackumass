@@ -10,6 +10,8 @@ const echo2 = new Gpio(22, { mode: Gpio.INPUT, alert: true });
 const echo3 = new Gpio(27, { mode: Gpio.INPUT, alert: true });
 trigger.digitalWrite(0); // Make sure trigger is low
 
+let throttle = false
+
 const io = require("socket.io-client");
 
 const socket = io.connect("http://skeeball.croissant.one:9000");
@@ -27,10 +29,12 @@ const watchHCSR04 = () => {
     } else {
       const endTick = tick;
       const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-      if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) {
+      if ((diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) && !throttle) {
         socket.emit("score",{
           points: 100
         })
+        throttle = true
+        setTimeout(() => {throttle = false}, 3000)
       }
     }
   });
@@ -42,10 +46,12 @@ const watchHCSR04 = () => {
       const endTick = tick;
       const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
       console.log(`Sensor 1: ${diff / 2 / MICROSECDONDS_PER_CM}`);
-      if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) {
+      if ((diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) && !throttle) {
         socket.emit("score",{
           points: 50
         })
+        throttle = true
+        setTimeout(() => {throttle = false}, 3000)
       }
     }
   });
@@ -57,10 +63,12 @@ const watchHCSR04 = () => {
       const endTick = tick;
       const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
       console.log(`Sensor 2: ${diff / 2 / MICROSECDONDS_PER_CM}`);
-      if (diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) {
+      if ((diff / 2 / MICROSECDONDS_PER_CM < THRESHOLD) && !throttle) {
         socket.emit("score",{
           points: 20
         })
+        throttle = true
+        setTimeout(() => {throttle = false}, 3000)
       }
     }
   });
@@ -76,6 +84,8 @@ const watchHCSR04 = () => {
         socket.emit("score",{
           points: 10
         })
+        throttle = true
+        setTimeout(() => {throttle = false}, 3000)
       }
     }
   });
